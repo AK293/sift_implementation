@@ -37,26 +37,16 @@ for i in range(1, spo + 3):
     sigma_value = sigma_formula(1, i)
     images[10+i] = cv2.GaussianBlur(curr_img, (0,0), sigma_value, cv2.BORDER_DEFAULT)
     curr_img = images[10+i]
-    plt.imshow(curr_img,cmap = 'gray')
-    plt.title('Octave 1, Scale {}'.format(i)), plt.xticks([]), plt.yticks([])
-    plt.show()
 
 for j in range(2, oct_max + 1):
     width, height = curr_img.shape[1] // 2, curr_img.shape[0] // 2
     dim = (width, height)
-    print("The images from Octave {} will have dimensions of {}".format(j, (height, width)))
-    images[j*10] = cv2.resize(curr_img, dim)    
+    images[j*10] = cv2.resize(curr_img, dim)  
     curr_img = images[j*10]    
-    plt.imshow(curr_img,cmap = 'gray')
-    plt.title('Octave {}, Scale 0'.format(j)), plt.xticks([]), plt.yticks([])
-    plt.show()
     for i in range(1, spo+3):
-        sigma_value = sigma_formula(j, i)
-        images[j*10+i] = cv2.resize(curr_img, dim)   
+        sigma_value = sigma_formula(j, i)   
+        images[j*10+i] = cv2.GaussianBlur(curr_img, (0,0), sigma_value, cv2.BORDER_DEFAULT)
         curr_img = images[j*10+1]
-        plt.imshow(curr_img,cmap = 'gray')
-        plt.title('Octave {}, Scale {}'.format(j,i)), plt.xticks([]), plt.yticks([])
-        plt.show()
 
 #Difference of Gaussians
 """
@@ -67,10 +57,4 @@ Keys are two-digit numbers. 1st digit = octave
 dog = {}
 for octave in range(1, oct_max+1):
     for scale in range(0, spo+2):
-        plt.imshow(images[octave*10+scale+1], cmap = 'gray')
-        plt.title('Octave {} Scale {}'.format(octave, scale+1))
-        plt.show()
-        plt.imshow(images[octave*10+scale], cmap = 'gray')
-        plt.title('Octave {} Scale {}'.format(octave, scale))
-        plt.show()
         dog[octave*10+scale] = images[octave*10+scale+1] - images[octave*10+scale]
